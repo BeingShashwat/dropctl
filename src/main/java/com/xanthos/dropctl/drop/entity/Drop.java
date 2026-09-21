@@ -5,10 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
-@Table(name = "drops", indexes = @Index(name = "idx_drops_expires_at", columnList = "expiresAt"))
+@Table(name = "drops")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,22 +18,24 @@ public class Drop {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long dropId;
 
-    @Column(nullable = false, unique = true, length = 16)
+    @Column(nullable = false, updatable = false, length = 32)
     private String slug;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private String originalFileName;
 
-    @Column(nullable = false)
-    private String storedFileName;
+    @Column(nullable = false, updatable = false)
+    private String storageKey;
 
+    @Column(nullable = false, updatable = false)
     private String contentType;
 
+    @Column(nullable = false, updatable = false)
     private long sizeBytes;
 
-    @Column(nullable = false)
-    private LocalDateTime uploadedAt;
+    @Column(nullable = false, updatable = false)
+    private Instant createdAt;
 
     @Column(nullable = false)
-    private LocalDateTime expiresAt;
+    private Instant expiresAt;
 }

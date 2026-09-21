@@ -7,10 +7,13 @@ spring:
         url: ${DB_URL}
         username: ${DB_USERNAME}
         password: ${DB_PASSWORD}
+    flyway:
+        enabled: true
+        location: classpath:db/migration
     jpa:
         open-in-view: false
         hibernate:
-            ddl-auto: none
+            ddl-auto: validate
 
 server:
     shutdown: graceful
