@@ -2,6 +2,7 @@ package com.xanthos.dropctl.common.storage;
 
 import com.xanthos.dropctl.common.config.StorageProperties;
 import com.xanthos.dropctl.common.exception.StorageException;
+import com.xanthos.dropctl.common.exception.StorageObjectNotFoundException;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -65,7 +66,7 @@ public class S3StorageService implements StorageService {
             return s3Client.getObject(
                     GetObjectRequest.builder().bucket(properties.bucket()).key(key).build());
         } catch (NoSuchKeyException e) {
-            throw new StorageException("Stored file not found", e);
+            throw new StorageObjectNotFoundException("Stored file not found", e);
         } catch (SdkException e) {
             throw new StorageException("Could not read file", e);
         }

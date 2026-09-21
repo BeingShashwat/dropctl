@@ -48,4 +48,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         problem.setTitle(title);
         return problem;
     }
+
+    @ExceptionHandler(DropNotFoundException.class)
+    public ProblemDetail handleNotFound(DropNotFoundException ex) {
+        return problem(HttpStatus.NOT_FOUND, "Drop not found", ex.getMessage());
+    }
+
+    @ExceptionHandler(DropExpiredException.class)
+    public ProblemDetail handleExpired(DropExpiredException ex) {
+        return problem(HttpStatus.GONE, "Drop expired", ex.getMessage());
+    }
+
+    @ExceptionHandler(StorageObjectNotFoundException.class)
+    public ProblemDetail handleMissingObject(StorageObjectNotFoundException ex) {
+        log.error("Drop row exists but its stored object is missing", ex);
+        return problem(HttpStatus.NOT_FOUND, "Drop not found", "Drop not found");
+    }
 }

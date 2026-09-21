@@ -1,10 +1,7 @@
 package com.xanthos.dropctl.drop.service;
 
 import com.xanthos.dropctl.common.config.ExpiryProperties;
-import com.xanthos.dropctl.common.exception.InvalidExpiryException;
-import com.xanthos.dropctl.common.exception.InvalidFileException;
-import com.xanthos.dropctl.common.exception.SlugTakenException;
-import com.xanthos.dropctl.common.exception.StorageException;
+import com.xanthos.dropctl.common.exception.*;
 import com.xanthos.dropctl.common.storage.StorageService;
 import com.xanthos.dropctl.drop.entity.Drop;
 import com.xanthos.dropctl.drop.repository.DropRepository;
@@ -138,6 +135,31 @@ public class DropService {
             drop.setCreatedAt(createdAt);
             drop.setExpiresAt(expiresAt);
             return drop;
+        }
+    }
+
+    public Drop getActiveDrop(String slug) {
+        String normalized = normalizeForLookup(slug);
+        Drop drop = dropRepository.findBySlug(normalized)
+                .orElseThrow(DropNotFoundException::new);
+        if (!drop.getExpiresAt().isAfter(Instant.now())) {
+            throw new DropExpiredException();
+        }
+        return drop;
+    }
+
+    /** The caller must close the returned stream. */
+    public InputStream openFile(Drop drop) {
+        return storageService.load(drop.getStorageKey());
+    }
+
+    // A slug that could never have been issued is simply "not found", not a 400,
+// so lookups don't reveal our slug rules.
+    private String normalizeForLookup(String slug) {
+        try {
+            return slugValidator.validateAndNormalize(slug);
+        } catch (InvalidSlugException e) {
+            throw new DropNotFoundException();
         }
     }
 }
