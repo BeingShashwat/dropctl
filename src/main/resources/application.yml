@@ -14,6 +14,31 @@ spring:
         open-in-view: false
         hibernate:
             ddl-auto: validate
+    servlet:
+        multipart:
+            max-file-size: 10MB
+            max-request-size: 10MB
+
+dropctl:
+    upload:
+        allowed-types:
+            # extension: [canonical content type, other sniffed types accepted for it...]
+            jpg:  [image/jpeg]
+            jpeg: [image/jpeg]
+            png:  [image/png]
+            gif:  [image/gif]
+            webp: [image/webp]
+            pdf:  [application/pdf]
+            txt:  [text/plain]
+            csv:  [text/csv, text/plain]
+            docx: [application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/x-tika-ooxml, application/zip]
+            xlsx: [application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/x-tika-ooxml, application/zip]
+            pptx: [application/vnd.openxmlformats-officedocument.presentationml.presentation, application/x-tika-ooxml, application/zip]
+    storage:
+        bucket: ${S3_BUCKET_NAME}
+        region: ${AWS_REGION}
+        access-key: ${AWS_ACCESS_KEY_ID:}
+        secret-key: ${AWS_SECRET_ACCESS_KEY:}
 
 server:
     shutdown: graceful
