@@ -17,7 +17,7 @@ public class SlugValidator {
 
         String slug = raw.trim().toLowerCase(Locale.ROOT);
 
-        if(FORMAT.matcher(slug).matches()) throw new InvalidSlugException("Slug must be 3-32 characters: letters, digits and hyphens, not starting or ending with a hyphen");
+        if(!FORMAT.matcher(slug).matches()) throw new InvalidSlugException("Slug must be 3-32 characters: letters, digits and hyphens, not starting or ending with a hyphen");
 
         if(RESERVED.contains(slug)) throw new InvalidSlugException("This slug is reserved");
 
