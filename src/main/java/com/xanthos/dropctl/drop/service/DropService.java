@@ -1,5 +1,6 @@
 package com.xanthos.dropctl.drop.service;
 
+import com.xanthos.dropctl.common.config.AppProperties;
 import com.xanthos.dropctl.common.config.ExpiryProperties;
 import com.xanthos.dropctl.common.exception.*;
 import com.xanthos.dropctl.common.storage.StorageService;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Base64;
 import java.util.Optional;
 
 @Slf4j
@@ -30,6 +32,8 @@ public class DropService {
     private final SlugGenerator slugGenerator;
     private final SlugValidator slugValidator;
     private final ExpiryProperties expiryProperties;
+    private final AppProperties appProperties;
+    private final QrCodeService qrCodeService;
 
     // Deliberately not @Transactional: no DB transaction should stay open during the
     // S3 upload, and each save attempt must commit or fail on its own so retries work.
@@ -161,5 +165,17 @@ public class DropService {
         } catch (InvalidSlugException e) {
             throw new DropNotFoundException();
         }
+    }
+
+    public String shareUrl(Drop drop) {
+        return appProperties.shareUrl(drop.getSlug());
+    }
+
+    public byte[] qrCodePng(Drop drop) {
+        return qrCodeService.generatePng(shareUrl(drop));
+    }
+
+    public String qrCodeDataUri(Drop drop) {
+        return "data:image/png;base64," + Base64.getEncoder().encodeToString(qrCodePng(drop));
     }
 }

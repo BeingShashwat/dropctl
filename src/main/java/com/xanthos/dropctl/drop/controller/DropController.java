@@ -27,7 +27,8 @@ public class DropController {
             @RequestParam(value = "expiresInHours", required = false) Integer expiresInHours) {
 
         Drop drop = dropService.createDrop(file, slug, expiresInHours);
-        return ResponseEntity.status(HttpStatus.CREATED).body(UploadResponse.from(drop));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(UploadResponse.from(drop, dropService.shareUrl(drop), dropService.qrCodeDataUri(drop)));
     }
 
     @GetMapping("/{slug}")
@@ -51,5 +52,14 @@ public class DropController {
                 .header("X-Content-Type-Options", "nosniff")
                 .cacheControl(CacheControl.noStore())
                 .body(new InputStreamResource(stream));
+    }
+
+    @GetMapping("/{slug}/qr")
+    public ResponseEntity<byte[]> qrCode(@PathVariable String slug) {
+        Drop drop = dropService.getActiveDrop(slug);
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_PNG)
+                .cacheControl(CacheControl.noStore())
+                .body(dropService.qrCodePng(drop));
     }
 }

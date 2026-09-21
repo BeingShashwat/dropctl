@@ -6,15 +6,19 @@ import java.time.Instant;
 
 public record UploadResponse(
         String slug,
+        String url,
+        String qrCode,
         String fileName,
         String contentType,
         long sizeBytes,
         Instant createdAt,
         Instant expiresAt) {
 
-    public static UploadResponse from(Drop drop) {
+    public static UploadResponse from(Drop drop, String url, String qrCode) {
         return new UploadResponse(
                 drop.getSlug(),
+                url,
+                qrCode,
                 drop.getOriginalFileName(),
                 drop.getContentType(),
                 drop.getSizeBytes(),

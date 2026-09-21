@@ -42,6 +42,8 @@ dropctl:
     expiry:
         default-hours: 24
         max-hours: 168
+    app:
+        base-url: ${APP_BASE_URL}
 
 server:
     shutdown: graceful
