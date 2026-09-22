@@ -1,9 +1,12 @@
 package com.xanthos.dropctl.drop.controller;
 
+import com.xanthos.dropctl.common.config.RateLimitProperties;
+import com.xanthos.dropctl.common.ratelimit.RateLimiter;
 import com.xanthos.dropctl.drop.dto.DropInfoResponse;
 import com.xanthos.dropctl.drop.dto.UploadResponse;
 import com.xanthos.dropctl.drop.entity.Drop;
 import com.xanthos.dropctl.drop.service.DropService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.*;
@@ -19,12 +22,18 @@ import java.nio.charset.StandardCharsets;
 public class DropController {
 
     private final DropService dropService;
+    private final RateLimiter rateLimiter;
+    private final RateLimitProperties rateLimitProperties;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<UploadResponse> upload(
             @RequestParam("file") MultipartFile file,
             @RequestParam(value = "slug", required = false) String slug,
-            @RequestParam(value = "expiresInHours", required = false) Integer expiresInHours) {
+            @RequestParam(value = "expiresInHours", required = false) Integer expiresInHours,
+            HttpServletRequest request) {
+
+        RateLimitProperties.Upload limit = rateLimitProperties.upload();
+        rateLimiter.checkLimit("upload:" + request.getRemoteAddr(), limit.maxRequests(), limit.window());
 
         Drop drop = dropService.createDrop(file, slug, expiresInHours);
         return ResponseEntity.status(HttpStatus.CREATED)

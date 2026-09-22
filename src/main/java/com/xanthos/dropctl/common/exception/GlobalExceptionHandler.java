@@ -1,8 +1,10 @@
 package com.xanthos.dropctl.common.exception;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -63,5 +65,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ProblemDetail handleMissingObject(StorageObjectNotFoundException ex) {
         log.error("Drop row exists but its stored object is missing", ex);
         return problem(HttpStatus.NOT_FOUND, "Drop not found", "Drop not found");
+    }
+
+    @ExceptionHandler(RateLimitExceededException.class)
+    public ResponseEntity<ProblemDetail> handleRateLimit(RateLimitExceededException ex) {
+        ProblemDetail problem = problem(HttpStatus.TOO_MANY_REQUESTS, "Too many requests", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                .header(HttpHeaders.RETRY_AFTER, String.valueOf(ex.retryAfterSeconds()))
+                .body(problem);
     }
 }
