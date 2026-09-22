@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+    <!-- ── Primary ────────────────────────────────────────────────────────
+         Mirrored in src/lib/seo.ts (HOME_TITLE / HOME_DESCRIPTION).
+         Keep the two in sync: this copy serves crawlers that do not run JS. -->
+    <title>dropctl — Temporary File Sharing with Self-Deleting Links</title>
+    <meta
+      name="description"
+      content="Share a file with a short link and QR code that deletes itself. Pick an expiry from 1 hour to 7 days, skip the sign-up, and know the file is gone when the link stops working."
+    />
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1"
+    />
+    <link rel="canonical" href="%SITE_URL%/" />
+
+    <!-- ── Open Graph ─────────────────────────────────────────────────── -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="dropctl" />
+    <meta
+      property="og:title"
+      content="dropctl — Temporary File Sharing with Self-Deleting Links"
+    />
+    <meta
+      property="og:description"
+      content="Share a file with a short link and QR code that deletes itself. Pick an expiry from 1 hour to 7 days, skip the sign-up, and know the file is gone when the link stops working."
+    />
+    <meta property="og:url" content="%SITE_URL%/" />
+    <meta property="og:image" content="%SITE_URL%/og-image.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="dropctl — send a file that deletes itself." />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- ── Twitter / X ────────────────────────────────────────────────── -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="dropctl — Temporary File Sharing with Self-Deleting Links"
+    />
+    <meta
+      name="twitter:description"
+      content="Share a file with a short link and QR code that deletes itself. Pick an expiry from 1 hour to 7 days."
+    />
+    <meta name="twitter:image" content="%SITE_URL%/og-image.png" />
+    <meta name="twitter:image:alt" content="dropctl — send a file that deletes itself." />
+
+    <!-- ── Icons & platform ───────────────────────────────────────────── -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="application-name" content="dropctl" />
+    <meta name="apple-mobile-web-app-title" content="dropctl" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f5f1ea" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#13161b" media="(prefers-color-scheme: dark)" />
+
+    <!-- ── Fonts ──────────────────────────────────────────────────────── -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- ── Structured data ────────────────────────────────────────────── -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "dropctl",
+        "alternateName": "dropctl — temporary file sharing",
+        "url": "%SITE_URL%/",
+        "description": "Upload a file, share a short link and QR code, and choose exactly how long it lives. Files are deleted automatically when the link expires.",
+        "applicationCategory": "UtilitiesApplication",
+        "applicationSubCategory": "File sharing",
+        "operatingSystem": "Any — runs in a web browser",
+        "browserRequirements": "Requires JavaScript",
+        "isAccessibleForFree": true,
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "featureList": [
+          "Self-deleting file links with an expiry from 1 hour to 7 days",
+          "Short shareable URL plus a downloadable QR code",
+          "Custom slugs for memorable links",
+          "No account or sign-up required",
+          "AES-256 server-side encryption at rest",
+          "Automatic cleanup of expired files and records"
+        ]
+      }
+    </script>
+
+    <!-- ── Minimal shell styling so the fallback does not flash unstyled ── -->
+    <style>
+      :root {
+        color-scheme: light dark;
+      }
+      body {
+        margin: 0;
+        background: #f5f1ea;
+        color: #322f29;
+        font: 16px/1.55 Inter, system-ui, -apple-system, "Segoe UI", Roboto,
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      @media (prefers-color-scheme: dark) {
+        body {
+          background: #13161b;
+          color: #e2e6ed;
+        }
+      }
+      .seo-shell {
+        max-width: 60rem;
+        margin: 0 auto;
+        padding: 6rem 1.5rem 3rem;
+      }
+      .seo-shell h1 {
+        font-size: 2rem;
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+        margin: 0 0 0.75rem;
+      }
+      .seo-shell p {
+        max-width: 38rem;
+        margin: 0 0 2rem;
+        opacity: 0.75;
+      }
+      .seo-shell h2 {
+        font-size: 0.75rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        opacity: 0.55;
+        margin: 0 0 0.75rem;
+        font-family: "JetBrains Mono", ui-monospace, monospace;
+      }
+      .seo-shell dl {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+        gap: 1rem;
+        margin: 0;
+      }
+      .seo-shell dt {
+        font-size: 0.8125rem;
+        opacity: 0.6;
+      }
+      .seo-shell dd {
+        margin: 0.15rem 0 0;
+        font-family: "JetBrains Mono", ui-monospace, monospace;
+        font-size: 0.8125rem;
+      }
+    </style>
+
+    <!-- Apply the stored theme before first paint to avoid a flash. -->
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem("dropctl-theme");
+          var dark =
+            stored === "dark" ||
+            (!stored &&
+              window.matchMedia("(prefers-color-scheme: dark)").matches);
+          document.documentElement.classList.toggle("dark", dark);
+        } catch (e) {
+          /* ignore */
+        }
+      })();
+    </script>
+  </head>
+
+  <body>
+    <!--
+      Server-rendered fallback. React replaces this on mount. Its content
+      mirrors what the running app actually shows — the page heading, the
+      product description and the enforced limits — so crawlers that do not
+      execute JavaScript still see the real page, and visitors without
+      JavaScript still get the essential information.
+    -->
+    <div id="root">
+      <div class="seo-shell">
+        <h1>Send a file that deletes itself.</h1>
+        <p>
+          dropctl is temporary file sharing without the sign-up. Upload a file,
+          get a short link and a QR code, and choose exactly how long it should
+          live. When the expiry passes the file is deleted from storage, not
+          just hidden.
+        </p>
+
+        <h2>Limits</h2>
+        <dl>
+          <div>
+            <dt>Max file size</dt>
+            <dd>10 MB</dd>
+          </div>
+          <div>
+            <dt>Link lifetime</dt>
+            <dd>1 hour → 7 days</dd>
+          </div>
+          <div>
+            <dt>Encryption at rest</dt>
+            <dd>AES-256</dd>
+          </div>
+          <div>
+            <dt>On expiry</dt>
+            <dd>Deleted</dd>
+          </div>
+        </dl>
+
+        <noscript>
+          <p style="margin-top: 2rem">
+            Uploading and downloading require JavaScript. Everything else on
+            this page works without it.
+          </p>
+        </noscript>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

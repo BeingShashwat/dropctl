@@ -1,0 +1,164 @@
+/**
+ * Arrow-fill button: a pill whose right-hand notch expands into a full fill on
+ * hover/focus, sliding the arrow out and swapping the label colour with it.
+ *
+ * Colours come from CSS variables so a single set of semantic defaults works in
+ * both themes, and any caller can override them per instance.
+ */
+
+.btn-arrow-fill {
+  /* Semantic defaults — indigo pill that inverts to the surface on hover. */
+  --btn-bg: var(--accent);
+  --btn-text: var(--accent-fg);
+  --btn-fill-bg: var(--surface);
+  --btn-fill-text: var(--accent);
+  --btn-fill-bg-hover: var(--surface);
+  --btn-fill-text-hover: var(--accent);
+  --btn-arrow: var(--accent);
+  --btn-arrow-hover: var(--accent);
+
+  /* Geometry, overridden per size below. */
+  --btn-inset: 0.4rem;
+  --btn-pill: 2.5rem;
+  --btn-pad-left: 1.5rem;
+  --btn-pad-right: 3.5rem;
+  --btn-icon: 0.75rem;
+  --btn-icon-right: 1rem;
+  --btn-ease: cubic-bezier(0.785, 0.135, 0.15, 0.86);
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  height: 3rem;
+  padding-inline: var(--btn-pad-left) var(--btn-pad-right);
+  border: none;
+  border-radius: 999px;
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-decoration: none;
+  cursor: pointer;
+  text-rendering: geometricPrecision;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-arrow-fill:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.btn-arrow-fill:disabled,
+.btn-arrow-fill[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.btn-arrow-fill__label {
+  position: relative;
+  z-index: 1;
+}
+
+/* The expanding fill. At rest it is clipped to a notch on the right that holds
+   the arrow; on hover it opens up to cover the whole pill. */
+.btn-arrow-fill__fill {
+  position: absolute;
+  inset: -1px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  padding-inline: var(--btn-pad-left) var(--btn-pad-right);
+  border-radius: 999px;
+  background-color: var(--btn-fill-bg);
+  color: var(--btn-fill-text);
+  clip-path: inset(
+    var(--btn-inset) var(--btn-inset) var(--btn-inset)
+      calc(100% - var(--btn-pill)) round 999px
+  );
+  transition:
+    clip-path 0.45s var(--btn-ease),
+    background-color 0.45s var(--btn-ease),
+    color 0.45s var(--btn-ease);
+}
+
+.btn-arrow-fill__fill-label {
+  white-space: nowrap;
+}
+
+.btn-arrow-fill__icon {
+  position: absolute;
+  top: 50%;
+  right: var(--btn-icon-right);
+  transform: translateY(-50%);
+  width: var(--btn-icon);
+  height: var(--btn-icon);
+  overflow: hidden;
+  flex: 0 0 auto;
+  color: var(--btn-arrow);
+}
+
+.btn-arrow-fill__path {
+  transform-origin: center center;
+  fill: currentColor;
+  transition: transform 0.45s var(--btn-ease);
+  /* Resting arrow sits outside the notch; the duplicate covers the slide. */
+  transform: translateX(0) scale(1);
+}
+
+.btn-arrow-fill__path:first-child {
+  transform: translateX(-120%) scale(0);
+}
+
+.btn-arrow-fill:is(:hover, :focus-visible):not(:disabled):not(
+    [aria-disabled="true"]
+  )
+  .btn-arrow-fill__icon {
+  color: var(--btn-arrow-hover);
+}
+
+.btn-arrow-fill:is(:hover, :focus-visible):not(:disabled):not(
+    [aria-disabled="true"]
+  )
+  .btn-arrow-fill__path:first-child {
+  transform: translateX(0) scale(1);
+}
+
+.btn-arrow-fill:is(:hover, :focus-visible):not(:disabled):not(
+    [aria-disabled="true"]
+  )
+  .btn-arrow-fill__path:last-child {
+  transform: translateX(120%) scale(0);
+}
+
+.btn-arrow-fill:is(:hover, :focus-visible):not(:disabled):not(
+    [aria-disabled="true"]
+  )
+  .btn-arrow-fill__fill {
+  clip-path: inset(0 round 999px);
+  background-color: var(--btn-fill-bg-hover);
+  color: var(--btn-fill-text-hover);
+}
+
+/* ── Sizes ───────────────────────────────────────────────────────────── */
+.btn-arrow-fill--sm {
+  --btn-inset: 0.3rem;
+  --btn-pill: 2.15rem;
+  --btn-pad-left: 1.125rem;
+  --btn-pad-right: 2.875rem;
+  --btn-icon: 0.7rem;
+  --btn-icon-right: 0.8rem;
+  height: 2.5rem;
+  font-size: 0.8125rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-arrow-fill__fill,
+  .btn-arrow-fill__path {
+    transition: none;
+  }
+}
