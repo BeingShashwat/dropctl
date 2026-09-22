@@ -12,7 +12,8 @@ public record UploadResponse(
         String contentType,
         long sizeBytes,
         Instant createdAt,
-        Instant expiresAt) {
+        Instant expiresAt,
+        boolean isBundle) {
 
     public static UploadResponse from(Drop drop, String url, String qrCode) {
         return new UploadResponse(
@@ -23,6 +24,7 @@ public record UploadResponse(
                 drop.getContentType(),
                 drop.getSizeBytes(),
                 drop.getCreatedAt(),
-                drop.getExpiresAt());
+                drop.getExpiresAt(),
+                drop.isBundle());
     }
 }

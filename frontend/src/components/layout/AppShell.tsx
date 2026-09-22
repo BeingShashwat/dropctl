@@ -6,8 +6,8 @@ export function AppShell({ children }: { children: ReactNode }) {
     <div className="flex min-h-dvh flex-col bg-canvas">
       <Header />
 
-      {/* Top padding clears the fixed floating console bar. */}
-      <main className="mx-auto w-full max-w-5xl flex-1 px-4 pt-24 pb-10 sm:px-6 sm:pt-28 sm:pb-14">
+      {/* The header is sticky, so content only needs breathing room below it. */}
+      <main className="mx-auto w-full max-w-5xl flex-1 px-4 pt-8 pb-10 sm:px-6 sm:pt-12 sm:pb-14">
         {children}
       </main>
 

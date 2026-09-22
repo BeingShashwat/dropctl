@@ -213,8 +213,24 @@
   }
 }
 
+/* Terminal caret: hard on/off steps, not a fade. */
+@keyframes caret-blink {
+  0%,
+  55% {
+    opacity: 1;
+  }
+  56%,
+  100% {
+    opacity: 0;
+  }
+}
+
 @utility animate-rise {
   animation: rise 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@utility animate-blink {
+  animation: caret-blink 1.1s steps(1) infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {

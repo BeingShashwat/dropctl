@@ -38,6 +38,7 @@ dropctl:
             docx: [application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/x-tika-ooxml, application/zip]
             xlsx: [application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/x-tika-ooxml, application/zip]
             pptx: [application/vnd.openxmlformats-officedocument.presentationml.presentation, application/x-tika-ooxml, application/zip]
+            zip: [application/zip, application/x-zip-compressed]
     storage:
         bucket: ${S3_BUCKET_NAME}
         region: ${AWS_REGION}

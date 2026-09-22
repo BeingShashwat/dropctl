@@ -32,13 +32,14 @@ public class DropController {
             @RequestParam("file") MultipartFile file,
             @RequestParam(value = "slug", required = false) String slug,
             @RequestParam(value = "expiresInHours", required = false) Integer expiresInHours,
+            @RequestParam(value = "isBundle", required = false, defaultValue = "false") boolean isBundle,
             HttpServletRequest request) {
 
         RateLimitProperties.Upload limit = rateLimitProperties.upload();
         String clientIp = clientIpResolver.resolve(request);
         rateLimiter.checkLimit("upload:" + clientIp, limit.maxRequests(), limit.window());
 
-        Drop drop = dropService.createDrop(file, slug, expiresInHours);
+        Drop drop = dropService.createDrop(file, slug, expiresInHours, isBundle);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(UploadResponse.from(drop, dropService.shareUrl(drop), dropService.qrCodeDataUri(drop)));
     }

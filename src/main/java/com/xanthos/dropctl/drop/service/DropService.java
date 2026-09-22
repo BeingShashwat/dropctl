@@ -37,7 +37,7 @@ public class DropService {
 
     // Deliberately not @Transactional: no DB transaction should stay open during the
     // S3 upload, and each save attempt must commit or fail on its own so retries work.
-    public Drop createDrop(MultipartFile file, String requestedSlug, Integer expiresInHours) {
+    public Drop createDrop(MultipartFile file, String requestedSlug, Integer expiresInHours, boolean isBundle) {
         FileValidator.ValidatedFile validated = fileValidator.validate(file);
         Duration lifetime = resolveLifetime(expiresInHours);
 
@@ -54,7 +54,7 @@ public class DropService {
             Instant now = Instant.now();
             StoredUpload upload = new StoredUpload(
                     validated.originalFileName(), validated.contentType(), file.getSize(),
-                    storageKey, now, now.plus(lifetime));
+                    storageKey, now, now.plus(lifetime), isBundle);
 
             return customSlug != null
                     ? saveWithCustomSlug(upload, customSlug)
@@ -127,7 +127,7 @@ public class DropService {
     }
 
     private record StoredUpload(String originalFileName, String contentType, long sizeBytes,
-                                String storageKey, Instant createdAt, Instant expiresAt) {
+                                String storageKey, Instant createdAt, Instant expiresAt, boolean isBundle) {
 
         Drop toDrop(String slug) {
             Drop drop = new Drop();
@@ -138,6 +138,7 @@ public class DropService {
             drop.setSizeBytes(sizeBytes);
             drop.setCreatedAt(createdAt);
             drop.setExpiresAt(expiresAt);
+            drop.setBundle(isBundle);
             return drop;
         }
     }

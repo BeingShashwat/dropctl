@@ -1,11 +1,18 @@
+import logoMarkDark from "../../assets/logo-mark-dark.png";
+import logoMarkLight from "../../assets/logo-mark-light.png";
 import { cn } from "../../lib/utils";
 import { focusRing, transitionBase } from "../../lib/styles";
 import { navigate } from "../../lib/router";
-import { BrandMark } from "./BrandMark";
+import { useTheme } from "../../context/theme-context";
 
 /**
- * The wordmark splits at the tool-name convention: "drop" in the UI face and
- * "ctl" in mono, the way a command-line utility would be written.
+ * The mark is the provided brand artwork: the blue drop-arrow, cropped from
+ * the full lockup. Its navy details are near-invisible on the dark theme
+ * (1.0:1 against the canvas), so a pre-derived variant recolours only the
+ * navy to the dark-UI foreground tone; the blue is untouched in both.
+ *
+ * The wordmark stays live text — "drop" in the UI face, "ctl" in mono —
+ * because the lockup's raster wordmark would be unreadable at header size.
  */
 export function Logo({
   showWordmark = true,
@@ -14,6 +21,8 @@ export function Logo({
   showWordmark?: boolean;
   className?: string;
 }) {
+  const { theme } = useTheme();
+
   return (
     <button
       type="button"
@@ -27,9 +36,13 @@ export function Logo({
         className
       )}
     >
-      <span className="flex h-8 w-8 items-center justify-center rounded-[10px] bg-gradient-to-br from-accent to-accent-hover text-accent-fg">
-        <BrandMark size={17} />
-      </span>
+      <img
+        src={theme === "dark" ? logoMarkDark : logoMarkLight}
+        alt=""
+        aria-hidden="true"
+        draggable={false}
+        className="h-8 w-8 object-contain"
+      />
 
       {showWordmark && (
         <span className="flex items-baseline text-[15px] leading-none">

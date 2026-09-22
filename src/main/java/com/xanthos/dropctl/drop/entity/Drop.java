@@ -38,4 +38,7 @@ public class Drop {
 
     @Column(nullable = false)
     private Instant expiresAt;
+
+    @Column(nullable = false, updatable = false)
+    private boolean isBundle;
 }
