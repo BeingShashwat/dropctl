@@ -1,11 +1,11 @@
 import { useState } from "react";
 import {
   ChevronDown,
+  Files,
   RotateCcw,
   ShieldCheck,
   SlidersHorizontal,
   Timer,
-  UploadCloud,
 } from "lucide-react";
 import type { UploadResponse } from "../api/types";
 import { getDownloadUrl, uploadFile } from "../api/client";
@@ -15,9 +15,10 @@ import {
   EXPIRY_OPTIONS,
   MAX_EXPIRY_HOURS,
   MAX_FILE_BYTES,
-  validateFile,
+  validateFiles,
   validateSlug,
 } from "../lib/config";
+import { zipFiles } from "../lib/bundle";
 import { cn } from "../lib/utils";
 import { shareUrlFor } from "../lib/router";
 import { Card, CardHeader } from "../components/ui/Card";
@@ -38,7 +39,8 @@ import { HOME_DESCRIPTION, HOME_TITLE, useSeo } from "../lib/seo";
 /** Reference panel listing the real, enforced limits of the service. */
 function LimitsPanel() {
   const rows = [
-    { label: "Max file size", value: `${Math.round(MAX_FILE_BYTES / 1024 / 1024)} MB` },
+    { label: "Max size per drop", value: `${Math.round(MAX_FILE_BYTES / 1024 / 1024)} MB` },
+    { label: "Multiple files", value: "zipped automatically" },
     { label: "Link lifetime", value: `1h → ${MAX_EXPIRY_HOURS / 24}d` },
     { label: "At rest", value: "AES-256" },
     { label: "On expiry", value: "deleted" },
@@ -57,7 +59,9 @@ function LimitsPanel() {
             className="flex items-center justify-between gap-4 py-2"
           >
             <dt className="text-[13px] text-muted">{row.label}</dt>
-            <dd className="font-mono text-[13px] text-fg">{row.value}</dd>
+            <dd className="truncate font-mono text-[13px] text-fg">
+              {row.value}
+            </dd>
           </div>
         ))}
       </dl>
@@ -79,38 +83,43 @@ function UploadForm({
 }: {
   onUploaded: (result: UploadResponse) => void;
 }) {
-  const [file, setFile] = useState<File | null>(null);
+  const [files, setFiles] = useState<File[]>([]);
   const [slug, setSlug] = useState("");
   const [expiryHours, setExpiryHours] = useState<number>(DEFAULT_EXPIRY_HOURS);
   const [showOptions, setShowOptions] = useState(false);
   const [fileError, setFileError] = useState<string | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
-  const [uploading, setUploading] = useState(false);
+  const [phase, setPhase] = useState<"idle" | "zipping" | "uploading">("idle");
 
+  const uploading = phase !== "idle";
   const slugError = slug.trim() ? validateSlug(slug) : null;
   const activeOption = EXPIRY_OPTIONS.find((o) => o.hours === expiryHours);
 
-  const handleSelect = (next: File) => {
-    const error = validateFile(next);
+  const handleSelect = (picked: File[]) => {
+    // Merge into what's already staged so "Add files" accumulates.
+    const merged = [...files, ...picked];
+    const error = validateFiles(merged);
     setFileError(error);
     setFormError(null);
-    if (error) {
-      setFile(null);
-      return;
-    }
-    setFile(next);
+    if (error) return;
+    setFiles(merged);
+  };
+
+  const handleRemove = (index: number) => {
+    setFiles((current) => current.filter((_, i) => i !== index));
+    setFileError(null);
   };
 
   const handleClear = () => {
-    setFile(null);
+    setFiles([]);
     setFileError(null);
   };
 
   const handleSubmit = async () => {
     setFormError(null);
 
-    if (!file) {
-      setFileError("Choose a file to upload first.");
+    if (files.length === 0) {
+      setFileError("Choose at least one file to upload first.");
       return;
     }
     if (slugError) {
@@ -118,9 +127,21 @@ function UploadForm({
       return;
     }
 
-    setUploading(true);
     try {
-      const result = await uploadFile(file, slug.trim() || undefined, expiryHours);
+      // One file — including a genuine .zip the user already has — goes up
+      // exactly as-is. Several files are packed into one zip client-side and
+      // flagged with isBundle so the receiver can unpack them in the browser.
+      const isBundle = files.length > 1;
+      setPhase(isBundle ? "zipping" : "uploading");
+      const payload = isBundle ? await zipFiles(files) : files[0];
+      if (isBundle) setPhase("uploading");
+
+      const result = await uploadFile(
+        payload,
+        slug.trim() || undefined,
+        expiryHours,
+        isBundle
+      );
       onUploaded(result);
     } catch (err) {
       const detail =
@@ -129,22 +150,26 @@ function UploadForm({
           : "Upload failed. Please try again.";
       setFormError(detail);
     } finally {
-      setUploading(false);
+      setPhase("idle");
     }
   };
+
+  const busyLabel =
+    phase === "zipping" ? "Packing files" : uploading ? "Uploading" : "Create drop";
 
   return (
     <Card padding="lg" className="animate-rise">
       <CardHeader
-        icon={UploadCloud}
-        title="Upload a file"
-        description="One file per drop. The link stops working the moment it expires."
+        icon={Files}
+        title="Upload files"
+        description="One file or many — several are zipped for you, and the link stops working the moment it expires."
       />
 
       <div className="mt-5 space-y-5">
         <FileDropZone
-          file={file}
+          files={files}
           onSelect={handleSelect}
+          onRemove={handleRemove}
           onClear={handleClear}
           error={fileError}
           disabled={uploading}
@@ -248,10 +273,10 @@ function UploadForm({
 
           <ArrowFillButton
             onClick={handleSubmit}
-            disabled={!file}
+            disabled={files.length === 0}
             loading={uploading}
           >
-            {uploading ? "Uploading" : "Create drop"}
+            {busyLabel}
           </ArrowFillButton>
         </div>
       </div>
@@ -271,8 +296,9 @@ function UploadResult({
   return (
     <div className="animate-rise space-y-5">
       <Alert tone="success" title="Drop created">
-        Your file is live and ready to share. It will be removed automatically
-        when the link expires.
+        {result.isBundle
+          ? "Your bundle is live and ready to share. It will be removed automatically when the link expires."
+          : "Your file is live and ready to share. It will be removed automatically when the link expires."}
       </Alert>
 
       <div className="grid gap-5 lg:grid-cols-2">
@@ -284,6 +310,7 @@ function UploadResult({
             sizeBytes={result.sizeBytes}
             createdAt={result.createdAt}
             expiresAt={result.expiresAt}
+            isBundle={result.isBundle}
             downloadHref={getDownloadUrl(result.slug)}
           />
           <ShareLinkCard slug={result.slug} shareUrl={shareUrl} />
@@ -309,7 +336,7 @@ function UploadResult({
               onClick={onReset}
               className="mt-4"
             >
-              Upload another file
+              Upload more files
             </Button>
           </Card>
         </div>
@@ -331,8 +358,8 @@ export function UploadPage() {
     <div className="space-y-8 sm:space-y-10">
       <PageIntro
         kicker="Temporary file drops"
-        title="Send a file that deletes itself."
-        description="Upload a file, get a short link and a QR code, and choose exactly how long it should live."
+        title="Send files that delete themselves."
+        description="Upload one file or a whole set, get a short link and a QR code, and choose exactly how long it should live."
       />
 
       {result ? (

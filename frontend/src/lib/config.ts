@@ -4,6 +4,8 @@
  * ExpiryProperties (default-hours 24, max-hours 168), SlugValidator.
  */
 
+import { formatBytes } from "./utils";
+
 export const MAX_FILE_BYTES = 10 * 1024 * 1024; // spring.servlet.multipart.max-file-size
 
 export const ALLOWED_EXTENSIONS = [
@@ -18,6 +20,7 @@ export const ALLOWED_EXTENSIONS = [
   "docx",
   "xlsx",
   "pptx",
+  "zip",
 ] as const;
 
 export const ALLOWED_ACCEPT = ALLOWED_EXTENSIONS.map((e) => `.${e}`).join(",");
@@ -108,5 +111,27 @@ export function validateFile(file: File): string | null {
     ).toFixed(0)} MB.`;
   }
   if (file.size === 0) return "File is empty.";
+  return null;
+}
+
+/**
+ * Validates a multi-file selection. Every file must pass the single-file
+ * rules, and — because several files are zipped into one upload — the total
+ * uncompressed size must also fit the server's per-file envelope.
+ */
+export function validateFiles(files: File[]): string | null {
+  if (files.length === 0) return null;
+  for (const file of files) {
+    const error = validateFile(file);
+    if (error) return `${file.name}: ${error}`;
+  }
+  const total = files.reduce((sum, f) => sum + f.size, 0);
+  if (total > MAX_FILE_BYTES) {
+    return `Selected files total ${formatBytes(total)}, above the ${(
+      MAX_FILE_BYTES /
+      1024 /
+      1024
+    ).toFixed(0)} MB limit for one drop.`;
+  }
   return null;
 }

@@ -18,7 +18,8 @@ async function handleResponse<T>(response: Response): Promise<T> {
 export async function uploadFile(
   file: File,
   slug?: string,
-  expiresInHours?: number
+  expiresInHours?: number,
+  isBundle = false
 ): Promise<UploadResponse> {
   const formData = new FormData();
   formData.append("file", file);
@@ -26,6 +27,9 @@ export async function uploadFile(
   if (expiresInHours !== undefined) {
     formData.append("expiresInHours", String(expiresInHours));
   }
+  // The server defaults this to false; only send it when actually a bundle
+  // so single-file requests look exactly like they did before.
+  if (isBundle) formData.append("isBundle", "true");
 
   const response = await fetch(BASE_URL, {
     method: "POST",
@@ -37,6 +41,21 @@ export async function uploadFile(
 export async function getDropInfo(slug: string): Promise<DropInfoResponse> {
   const response = await fetch(`${BASE_URL}/${encodeURIComponent(slug)}`);
   return handleResponse<DropInfoResponse>(response);
+}
+
+/** Fetches the raw stored bytes (needed client-side only for bundles). */
+export async function fetchDropBlob(slug: string): Promise<Blob> {
+  const response = await fetch(`${BASE_URL}/${encodeURIComponent(slug)}/file`);
+  if (!response.ok) {
+    const body = await response.json().catch(() => null);
+    const error: ApiError = {
+      status: response.status,
+      title: body?.title ?? "Error",
+      detail: body?.detail ?? response.statusText,
+    };
+    throw error;
+  }
+  return response.blob();
 }
 
 export function getDownloadUrl(slug: string): string {

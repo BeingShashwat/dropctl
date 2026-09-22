@@ -1,8 +1,9 @@
-import { CalendarClock, HardDrive, Timer, type LucideIcon } from "lucide-react";
+import { CalendarClock, HardDrive, Layers, Timer, type LucideIcon } from "lucide-react";
 import { Card, CardHeader } from "../ui/Card";
 import { Badge } from "../ui/Badge";
 import { ArrowFillButton } from "../ui/ArrowFillButton";
 import { FileTypeIcon } from "./FileTypeIcon";
+import { BundleContents } from "./BundleContents";
 import {
   fileKindLabel,
   formatBytes,
@@ -39,6 +40,7 @@ export function FileDetailsCard({
   sizeBytes,
   createdAt,
   expiresAt,
+  isBundle = false,
   downloadHref,
 }: {
   slug: string;
@@ -47,6 +49,7 @@ export function FileDetailsCard({
   sizeBytes: number;
   createdAt?: string;
   expiresAt: string;
+  isBundle?: boolean;
   downloadHref: string;
 }) {
   const countdown = formatCountdown(expiresAt);
@@ -78,6 +81,11 @@ export function FileDetailsCard({
             {fileName}
           </p>
           <div className="mt-1.5 flex flex-wrap items-center gap-2">
+            {isBundle && (
+              <Badge tone="accent" icon={Layers}>
+                Bundle
+              </Badge>
+            )}
             <Badge tone="neutral">{fileKindLabel(fileName, contentType)}</Badge>
             <span className="text-xs text-muted">{formatBytes(sizeBytes)}</span>
             <Badge tone={expired ? "danger" : "success"} icon={Timer}>
@@ -98,12 +106,16 @@ export function FileDetailsCard({
         <MetaRow icon={Timer} label="Expires" value={formatDateTime(expiresAt)} />
       </div>
 
-      {/* No `download` attribute here: the server already sends a named
-          Content-Disposition header, and setting one would override it. */}
       <div className="mt-5">
-        <ArrowFillButton href={downloadHref} disabled={expired}>
-          {expired ? "File expired" : "Download file"}
-        </ArrowFillButton>
+        {isBundle ? (
+          <BundleContents slug={slug} downloadHref={downloadHref} expired={expired} />
+        ) : (
+          /* No `download` attribute here: the server already sends a named
+             Content-Disposition header, and setting one would override it. */
+          <ArrowFillButton href={downloadHref} disabled={expired}>
+            {expired ? "File expired" : "Download file"}
+          </ArrowFillButton>
+        )}
       </div>
     </Card>
   );

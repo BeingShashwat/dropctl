@@ -109,6 +109,7 @@ function DropLoader({
             contentType={info.contentType}
             sizeBytes={info.sizeBytes}
             expiresAt={info.expiresAt}
+            isBundle={info.isBundle}
             downloadHref={getDownloadUrl(info.slug)}
           />
           <ShareLinkCard slug={info.slug} shareUrl={shareUrl} />

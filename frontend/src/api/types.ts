@@ -7,6 +7,7 @@ export interface UploadResponse {
   sizeBytes: number;
   createdAt: string;
   expiresAt: string;
+  isBundle: boolean;
 }
 
 export interface DropInfoResponse {
@@ -15,6 +16,7 @@ export interface DropInfoResponse {
   contentType: string;
   sizeBytes: number;
   expiresAt: string;
+  isBundle: boolean;
 }
 
 export interface ApiError {
