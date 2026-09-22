@@ -8,6 +8,12 @@ import { formatBytes } from "./utils";
 
 export const MAX_FILE_BYTES = 10 * 1024 * 1024; // spring.servlet.multipart.max-file-size
 
+/**
+ * UI-only cap on how many files one drop may bundle. The backend has no such
+ * limit — this just keeps the client-side zip (and the unpack list) sane.
+ */
+export const MAX_BUNDLE_FILES = 20;
+
 export const ALLOWED_EXTENSIONS = [
   "jpg",
   "jpeg",
@@ -121,6 +127,9 @@ export function validateFile(file: File): string | null {
  */
 export function validateFiles(files: File[]): string | null {
   if (files.length === 0) return null;
+  if (files.length > MAX_BUNDLE_FILES) {
+    return `Choose at most ${MAX_BUNDLE_FILES} files.`;
+  }
   for (const file of files) {
     const error = validateFile(file);
     if (error) return `${file.name}: ${error}`;

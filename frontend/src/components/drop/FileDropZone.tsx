@@ -4,6 +4,7 @@ import { cn, formatBytes, fileKindLabel } from "../../lib/utils";
 import {
   ALLOWED_ACCEPT,
   ALLOWED_EXTENSIONS,
+  MAX_BUNDLE_FILES,
   MAX_FILE_BYTES,
 } from "../../lib/config";
 import { focusRing, transitionBase } from "../../lib/styles";
@@ -117,7 +118,7 @@ export function FileDropZone({
               size="sm"
               icon={FilePlus2}
               onClick={openPicker}
-              disabled={disabled}
+              disabled={disabled || files.length >= MAX_BUNDLE_FILES}
             >
               Add files
             </Button>
@@ -175,7 +176,8 @@ export function FileDropZone({
 
       <div className="flex flex-wrap items-center justify-between gap-2 px-0.5">
         <p className="text-xs text-faint">
-          Up to {maxMb} MB per drop · {ALLOWED_EXTENSIONS.join(", ")}
+          Up to {maxMb} MB per drop · up to {MAX_BUNDLE_FILES} files ·{" "}
+          {ALLOWED_EXTENSIONS.join(", ")}
         </p>
       </div>
 

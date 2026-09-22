@@ -13,6 +13,7 @@ import {
   ALLOWED_EXTENSIONS,
   DEFAULT_EXPIRY_HOURS,
   EXPIRY_OPTIONS,
+  MAX_BUNDLE_FILES,
   MAX_EXPIRY_HOURS,
   MAX_FILE_BYTES,
   validateFiles,
@@ -40,6 +41,7 @@ import { HOME_DESCRIPTION, HOME_TITLE, useSeo } from "../lib/seo";
 function LimitsPanel() {
   const rows = [
     { label: "Max size per drop", value: `${Math.round(MAX_FILE_BYTES / 1024 / 1024)} MB` },
+    { label: "Files per drop", value: `up to ${MAX_BUNDLE_FILES}` },
     { label: "Multiple files", value: "zipped automatically" },
     { label: "Link lifetime", value: `1h → ${MAX_EXPIRY_HOURS / 24}d` },
     { label: "At rest", value: "AES-256" },
