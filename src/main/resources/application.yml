@@ -54,6 +54,8 @@ dropctl:
         upload:
             window: PT1H
             max-requests: 10
+    proxy:
+        trust-forwarded-headers: false
 
 server:
     shutdown: graceful
