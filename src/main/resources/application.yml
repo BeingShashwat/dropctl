@@ -16,8 +16,9 @@ spring:
             ddl-auto: validate
     servlet:
         multipart:
-            max-file-size: 10MB
-            max-request-size: 10MB
+            max-file-size: 100MB
+            max-request-size: 100MB
+            file-size-threshold: 2KB
     data:
         redis:
             host: ${REDIS_HOST}
@@ -60,6 +61,8 @@ dropctl:
 
 server:
     shutdown: graceful
+    tomcat:
+        max-swallow-size: 100MB
 
 management:
     endpoints:

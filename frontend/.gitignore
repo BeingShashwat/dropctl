@@ -10,6 +10,7 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+scripts
 *.local
 
 # Environment — keep the example, ignore real values

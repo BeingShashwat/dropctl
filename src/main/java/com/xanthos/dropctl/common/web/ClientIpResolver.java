@@ -13,9 +13,12 @@ public class ClientIpResolver {
 
     public String resolve(HttpServletRequest request) {
         if (proxyProperties.trustForwardedHeaders()) {
+            String cfConnectingIp = request.getHeader("CF-Connecting-IP");
+            if (cfConnectingIp != null && !cfConnectingIp.isBlank()) {
+                return cfConnectingIp.trim();
+            }
             String forwardedFor = request.getHeader("X-Forwarded-For");
             if (forwardedFor != null && !forwardedFor.isBlank()) {
-                // Leftmost entry is the original client; the proxy appends each hop after it.
                 return forwardedFor.split(",")[0].trim();
             }
         }
