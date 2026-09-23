@@ -1,6 +1,7 @@
 import type { UploadResponse, DropInfoResponse, ApiError } from "./types";
 
-const BASE_URL = "/api/drops";
+const API_URL = import.meta.env.VITE_API_URL;
+const BASE_URL = `${API_URL}/drops`;
 
 async function handleResponse<T>(response: Response): Promise<T> {
   if (!response.ok) {

@@ -57,7 +57,7 @@ dropctl:
             window: PT1H
             max-requests: 10
     proxy:
-        trust-forwarded-headers: false
+        trust-forwarded-headers: ${DROPCTL_PROXY_TRUST_FORWARDED_HEADERS:false}
 
 server:
     shutdown: graceful
