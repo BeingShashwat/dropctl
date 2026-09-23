@@ -55,7 +55,9 @@ export function CardHeader({
         <div className="min-w-0">
           <h2 className="truncate text-base font-semibold text-fg">{title}</h2>
           {description && (
-            <p className="mt-0.5 text-sm text-muted">{description}</p>
+            // break-words keeps unbreakable tokens (e.g. a long pasted slug)
+            // from inflating a grid track or poking past the viewport.
+            <p className="mt-0.5 text-sm break-words text-muted">{description}</p>
           )}
         </div>
       </div>

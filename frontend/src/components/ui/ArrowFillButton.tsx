@@ -26,6 +26,9 @@ export interface ArrowFillButtonProps {
   title?: string;
   "aria-label"?: string;
 
+  /** Full-width on phones, natural width from the `sm` breakpoint up. */
+  fluid?: boolean;
+
   /* Optional colour overrides — default to the semantic theme tokens. */
   bgColor?: string;
   textColor?: string;
@@ -56,6 +59,7 @@ export function ArrowFillButton({
   loading = false,
   onClick,
   title,
+  fluid = false,
   bgColor,
   textColor,
   fillBgColor,
@@ -82,6 +86,7 @@ export function ArrowFillButton({
   const classes = cn(
     "btn-arrow-fill",
     size === "sm" && "btn-arrow-fill--sm",
+    fluid && "btn-arrow-fill--fluid",
     className
   );
 

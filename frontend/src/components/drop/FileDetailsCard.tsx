@@ -60,7 +60,11 @@ export function FileDetailsCard({
       <CardHeader
         icon={HardDrive}
         title="File details"
-        description={`Identified by slug "${slug}"`}
+        description={
+          <span className="break-all font-mono text-xs">
+            Identified by slug "{slug}"
+          </span>
+        }
       />
 
       <div className="mt-5 flex items-center gap-4">
@@ -112,7 +116,7 @@ export function FileDetailsCard({
         ) : (
           /* No `download` attribute here: the server already sends a named
              Content-Disposition header, and setting one would override it. */
-          <ArrowFillButton href={downloadHref} disabled={expired}>
+          <ArrowFillButton href={downloadHref} disabled={expired} fluid>
             {expired ? "File expired" : "Download file"}
           </ArrowFillButton>
         )}

@@ -9,9 +9,9 @@ import { Button } from "../components/ui/Button";
 import { ArrowFillButton } from "../components/ui/ArrowFillButton";
 import { Skeleton } from "../components/ui/Skeleton";
 import { EmptyState } from "../components/ui/EmptyState";
-import { PageIntro } from "../components/layout/PageIntro";
 import { FileDetailsCard } from "../components/drop/FileDetailsCard";
-import { QrCodeCard, ShareLinkCard } from "../components/drop/ShareCard";
+import { SlugHero } from "../components/drop/SlugHero";
+import { QrCodeCard } from "../components/drop/ShareCard";
 
 type Status = "loading" | "ready" | "not-found" | "expired" | "error";
 
@@ -27,7 +27,16 @@ function DropSkeleton() {
   return (
     <div className="space-y-5" aria-busy="true" aria-live="polite">
       <span className="sr-only">Loading drop details</span>
-      <div className="grid gap-5 lg:grid-cols-2">
+      {/* Placeholder for the slug plate while the info call is in flight. */}
+      <div className="rounded-xl border border-line bg-surface shadow-[var(--shadow-card)]">
+        <div className="border-b border-line px-4 py-2.5">
+          <Skeleton className="h-2.5 w-44" />
+        </div>
+        <div className="px-4 py-6 sm:px-7 sm:py-8">
+          <Skeleton className="h-9 w-64 max-w-full sm:h-12" />
+        </div>
+      </div>
+      <div className="grid min-w-0 grid-cols-1 gap-5 lg:grid-cols-2">
         <Card padding="lg" className="space-y-5">
           <div className="flex items-start gap-3 border-b border-line pb-4">
             <Skeleton className="h-8 w-8" rounded="lg" />
@@ -101,21 +110,29 @@ function DropLoader({
     const { info } = state;
     const shareUrl = shareUrlFor(info.slug);
     return (
-      <div className="grid animate-rise gap-5 lg:grid-cols-2">
-        <div className="space-y-5">
-          <FileDetailsCard
-            slug={info.slug}
-            fileName={info.fileName}
-            contentType={info.contentType}
-            sizeBytes={info.sizeBytes}
-            expiresAt={info.expiresAt}
-            isBundle={info.isBundle}
-            downloadHref={getDownloadUrl(info.slug)}
-          />
-          <ShareLinkCard slug={info.slug} shareUrl={shareUrl} />
-        </div>
-        <div className="space-y-5">
-          <QrCodeCard slug={info.slug} shareUrl={shareUrl} />
+      <div className="min-w-0 animate-rise space-y-5">
+        {/* Same plate as the upload result: the slug, big, on top. */}
+        <SlugHero
+          slug={info.slug}
+          shareUrl={shareUrl}
+          label="Received drop — link is live"
+        />
+
+        <div className="grid min-w-0 grid-cols-1 gap-5 lg:grid-cols-2">
+          <div className="min-w-0 space-y-5">
+            <FileDetailsCard
+              slug={info.slug}
+              fileName={info.fileName}
+              contentType={info.contentType}
+              sizeBytes={info.sizeBytes}
+              expiresAt={info.expiresAt}
+              isBundle={info.isBundle}
+              downloadHref={getDownloadUrl(info.slug)}
+            />
+          </div>
+          <div className="min-w-0 space-y-5">
+            <QrCodeCard slug={info.slug} shareUrl={shareUrl} />
+          </div>
         </div>
       </div>
     );
@@ -129,7 +146,9 @@ function DropLoader({
           title="No drop found here"
           description="This link does not point to an active file. It may have been typed incorrectly, or the drop was already removed."
           actions={
-            <ArrowFillButton onClick={goHome}>Upload a new file</ArrowFillButton>
+            <ArrowFillButton onClick={goHome} fluid>
+              Upload a new file
+            </ArrowFillButton>
           }
         />
       </Card>
@@ -145,7 +164,9 @@ function DropLoader({
           title="This drop has expired"
           description="Expired files are deleted from storage, so this one can no longer be downloaded. Ask the sender for a fresh link."
           actions={
-            <ArrowFillButton onClick={goHome}>Upload a new file</ArrowFillButton>
+            <ArrowFillButton onClick={goHome} fluid>
+              Upload a new file
+            </ArrowFillButton>
           }
         />
       </Card>
@@ -161,8 +182,16 @@ function DropLoader({
         description={state.message}
         actions={
           <>
-            <ArrowFillButton onClick={onRetry}>Try again</ArrowFillButton>
-            <Button variant="secondary" size="md" icon={Home} onClick={goHome}>
+            <ArrowFillButton onClick={onRetry} fluid>
+              Try again
+            </ArrowFillButton>
+            <Button
+              variant="secondary"
+              size="md"
+              icon={Home}
+              onClick={goHome}
+              className="w-full sm:w-auto"
+            >
               Back to upload
             </Button>
           </>
@@ -185,12 +214,7 @@ export function DropPage({ slug }: { slug: string }) {
   });
 
   return (
-    <div className="space-y-8">
-      <PageIntro
-        kicker="Received a drop"
-        title="Shared file"
-        description="Check what arrived, then download it or pass the link on."
-      />
+    <div className="min-w-0 space-y-8">
       <DropLoader
         key={`${slug}:${attempt}`}
         slug={slug}

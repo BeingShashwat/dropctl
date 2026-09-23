@@ -30,8 +30,14 @@
   display: inline-flex;
   align-items: center;
   width: fit-content;
-  height: 3rem;
-  padding-inline: var(--btn-pad-left) var(--btn-pad-right);
+  /* Never wider than its container, however long the label. */
+  max-width: 100%;
+  /* Fluid geometry: identical on desktop, gracefully compact on phones. */
+  height: clamp(2.625rem, 3vw + 2.25rem, 3rem);
+  padding-inline: clamp(1.125rem, 4vw, 1.5rem)
+    clamp(2.5rem, 7vw, 3.5rem);
+  --btn-pill: clamp(2.1rem, 6vw, 2.5rem);
+  --btn-inset: clamp(0.325rem, 1.2vw, 0.4rem);
   border: none;
   border-radius: 999px;
   background: var(--btn-bg);
@@ -62,6 +68,10 @@
 .btn-arrow-fill__label {
   position: relative;
   z-index: 1;
+  /* Long labels ellipsize instead of pushing the pill past the screen. */
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* The expanding fill. At rest it is clipped to a notch on the right that holds
@@ -154,6 +164,17 @@
   --btn-icon-right: 0.8rem;
   height: 2.5rem;
   font-size: 0.8125rem;
+}
+
+/* Stretched to the container on phones, natural width from `sm` up. */
+.btn-arrow-fill--fluid {
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .btn-arrow-fill--fluid {
+    width: fit-content;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

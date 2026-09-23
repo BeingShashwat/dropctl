@@ -51,7 +51,9 @@ export function EmptyState({
       </div>
 
       {actions && (
-        <div className="flex flex-col gap-2 sm:flex-row sm:justify-center">
+        /* Children stretch full-width on phones and sit inline from `sm` up;
+           buttons that pass their own responsive width classes still win. */
+        <div className="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:flex-row sm:items-center sm:justify-center">
           {actions}
         </div>
       )}

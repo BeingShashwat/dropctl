@@ -24,6 +24,10 @@
   --line: #e7e0d4;
   --line-strong: #d6ccba;
 
+  /* QR quiet zone — deliberately pure white for scanner reliability,
+     identical in both themes. */
+  --qr-quiet: #ffffff;
+
   /* Accent */
   --accent: #5145cd;
   --accent-hover: #4237b8;
@@ -151,6 +155,19 @@
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+
+    /* Fallback for browsers without `clip` (2022+). */
+    overflow-x: hidden;
+  }
+
+  /*
+   * Nothing may push the page wider than the viewport. `clip` — unlike
+   * `hidden` — does not create a scroll container, so the sticky header
+   * keeps sticking and no horizontal pan can ever appear on phones.
+   */
+  html,
+  body {
+    overflow-x: clip;
   }
 
   body {

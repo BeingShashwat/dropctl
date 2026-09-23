@@ -1,7 +1,7 @@
 import { ExternalLink, Link2, QrCode as QrCodeIcon } from "lucide-react";
 import { Card, CardHeader } from "../ui/Card";
 import { CopyButton } from "../ui/CopyButton";
-import { Button } from "../ui/Button";
+import { Button, ButtonLink } from "../ui/Button";
 import { getQrCodeUrl } from "../../api/client";
 import { navigate } from "../../lib/router";
 
@@ -67,7 +67,8 @@ export function QrCodeCard({
       />
 
       <div className="mt-5 flex flex-col items-center gap-4">
-        <div className="rounded-xl border border-line bg-white p-3">
+        {/* QR quiet zones must stay white for scanners in both themes. */}
+        <div className="rounded-xl border border-line bg-[var(--qr-quiet)] p-3">
           <img
             src={qrUrl}
             alt={`QR code linking to the download page for ${slug}`}
@@ -79,21 +80,22 @@ export function QrCodeCard({
         </div>
 
         <div className="flex w-full flex-col gap-2 sm:flex-row">
-          <a
+          <ButtonLink
             href={qrUrl}
             download={`dropctl-${slug}-qr.png`}
-            className="flex-1"
+            variant="secondary"
+            size="md"
+            fullWidth
+            className="w-full sm:flex-1"
           >
-            <Button variant="secondary" size="md" fullWidth>
-              Download QR
-            </Button>
-          </a>
+            Download QR
+          </ButtonLink>
           <CopyButton
             value={shareUrl}
             label="Copy link"
             variant="secondary"
             size="md"
-            className="flex-1"
+            className="w-full sm:flex-1"
           />
         </div>
       </div>

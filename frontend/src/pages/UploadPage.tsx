@@ -20,7 +20,7 @@ import {
   validateSlug,
 } from "../lib/config";
 import { zipFiles } from "../lib/bundle";
-import { cn } from "../lib/utils";
+import { cn, formatCountdown } from "../lib/utils";
 import { shareUrlFor } from "../lib/router";
 import { Card, CardHeader } from "../components/ui/Card";
 import { Button } from "../components/ui/Button";
@@ -31,8 +31,9 @@ import { Field, TextInput } from "../components/ui/Field";
 import { PageIntro } from "../components/layout/PageIntro";
 import { FileDropZone } from "../components/drop/FileDropZone";
 import { FileDetailsCard } from "../components/drop/FileDetailsCard";
+import { SlugHero } from "../components/drop/SlugHero";
 import { OpenDropCard } from "../components/drop/OpenDropCard";
-import { QrCodeCard, ShareLinkCard } from "../components/drop/ShareCard";
+import { QrCodeCard } from "../components/drop/ShareCard";
 import { HomeContent } from "../components/home/HomeContent";
 import { focusRing, transitionBase } from "../lib/styles";
 import { HOME_DESCRIPTION, HOME_TITLE, useSeo } from "../lib/seo";
@@ -296,15 +297,12 @@ function UploadResult({
   const shareUrl = shareUrlFor(result.slug, result.url);
 
   return (
-    <div className="animate-rise space-y-5">
-      <Alert tone="success" title="Drop created">
-        {result.isBundle
-          ? "Your bundle is live and ready to share. It will be removed automatically when the link expires."
-          : "Your file is live and ready to share. It will be removed automatically when the link expires."}
-      </Alert>
+    <div className="space-y-5">
+      {/* The slug is the product — it leads the view at display size. */}
+      <SlugHero slug={result.slug} shareUrl={shareUrl} />
 
-      <div className="grid gap-5 lg:grid-cols-2">
-        <div className="space-y-5">
+      <div className="grid min-w-0 gap-5 lg:grid-cols-2">
+        <div className="min-w-0 space-y-5">
           <FileDetailsCard
             slug={result.slug}
             fileName={result.fileName}
@@ -315,31 +313,38 @@ function UploadResult({
             isBundle={result.isBundle}
             downloadHref={getDownloadUrl(result.slug)}
           />
-          <ShareLinkCard slug={result.slug} shareUrl={shareUrl} />
         </div>
 
-        <div className="space-y-5">
+        <div className="min-w-0 space-y-5">
           <QrCodeCard slug={result.slug} shareUrl={shareUrl} />
+
           <Card padding="lg">
-            <div className="flex items-center gap-3">
+            <div className="flex items-start gap-3">
               <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-elevated text-faint">
                 <Timer size={16} aria-hidden />
               </span>
-              <p className="text-sm text-muted">
-                Once a drop expires it cannot be recovered — keep the link
-                somewhere useful.
-              </p>
+              <div className="min-w-0 text-sm">
+                <p className="font-medium text-fg">
+                  {formatCountdown(result.expiresAt)}.
+                </p>
+                <p className="mt-0.5 text-muted">
+                  Then the file is purged from storage and the link dies with
+                  it. Keep the link somewhere useful.
+                </p>
+              </div>
             </div>
-            <Button
-              variant="secondary"
-              size="md"
-              icon={RotateCcw}
-              fullWidth
-              onClick={onReset}
-              className="mt-4"
-            >
-              Upload more files
-            </Button>
+
+            <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:justify-end">
+              <Button
+                variant="secondary"
+                size="md"
+                icon={RotateCcw}
+                onClick={onReset}
+                className="w-full sm:w-auto"
+              >
+                Upload more files
+              </Button>
+            </div>
           </Card>
         </div>
       </div>

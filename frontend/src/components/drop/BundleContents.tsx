@@ -7,7 +7,7 @@ import {
   type BundleEntry,
 } from "../../lib/bundle";
 import { formatBytes } from "../../lib/utils";
-import { Button } from "../ui/Button";
+import { Button, ButtonLink } from "../ui/Button";
 import { ArrowFillButton } from "../ui/ArrowFillButton";
 import { FileTypeIcon } from "./FileTypeIcon";
 
@@ -61,15 +61,20 @@ export function BundleContents({
   return (
     <div className="space-y-4">
       <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center">
-        <ArrowFillButton onClick={unpack} loading={working}>
+        <ArrowFillButton onClick={unpack} loading={working} fluid>
           {entries ? "Unpack again" : "Unpack files"}
         </ArrowFillButton>
 
-        <a href={downloadHref} className="sm:ml-auto">
-          <Button variant="secondary" size="md" icon={PackageOpen}>
-            Download as .zip
-          </Button>
-        </a>
+        <ButtonLink
+          href={downloadHref}
+          variant="secondary"
+          size="md"
+          icon={PackageOpen}
+          fullWidth
+          className="w-full sm:ml-auto sm:w-auto"
+        >
+          Download as .zip
+        </ButtonLink>
       </div>
 
       {error && (
