@@ -12,11 +12,13 @@ dist
 dist-ssr
 scripts
 *.local
+/scripts
 
 # Environment — keep the example, ignore real values
 .env
 .env.*
 !.env.example
+!.env.production
 
 # Editor directories and files
 .vscode/*
@@ -28,3 +30,6 @@ scripts
 *.njsproj
 *.sln
 *.sw?
+
+
+cloudflared.deb
