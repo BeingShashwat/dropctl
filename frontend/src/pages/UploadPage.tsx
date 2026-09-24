@@ -10,6 +10,7 @@ import {
 import type { UploadResponse } from "../api/types";
 import { getDownloadUrl, uploadFile } from "../api/client";
 import {
+  ALLOWED_CATEGORIES,
   ALLOWED_EXTENSIONS,
   DEFAULT_EXPIRY_HOURS,
   EXPIRY_OPTIONS,
@@ -34,12 +35,16 @@ import { FileDetailsCard } from "../components/drop/FileDetailsCard";
 import { SlugHero } from "../components/drop/SlugHero";
 import { OpenDropCard } from "../components/drop/OpenDropCard";
 import { QrCodeCard } from "../components/drop/ShareCard";
+import { AcceptedTypesModal } from "../components/drop/AcceptedTypesModal";
 import { HomeContent } from "../components/home/HomeContent";
 import { focusRing, transitionBase } from "../lib/styles";
 import { HOME_DESCRIPTION, HOME_TITLE, useSeo } from "../lib/seo";
 
 /** Reference panel listing the real, enforced limits of the service. */
 function LimitsPanel() {
+  const [showModal, setShowModal] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+
   const rows = [
     { label: "Max size per drop", value: `${Math.round(MAX_FILE_BYTES / 1024 / 1024)} MB` },
     { label: "Files per drop", value: `up to ${MAX_BUNDLE_FILES}` },
@@ -70,13 +75,68 @@ function LimitsPanel() {
       </dl>
 
       <div className="mt-4 border-t border-line pt-3.5">
-        <p className="font-mono text-[11px] tracking-[0.16em] text-faint uppercase">
-          Accepted
-        </p>
-        <p className="mt-2 font-mono text-[10px] leading-relaxed text-muted sm:text-[11px]">
-          {ALLOWED_EXTENSIONS.join(" · ")}
-        </p>
+        <div className="flex flex-wrap items-center justify-between gap-1.5">
+          <p className="font-mono text-[11px] tracking-[0.16em] text-faint uppercase">
+            Accepted Formats
+          </p>
+          <button
+            type="button"
+            onClick={() => setShowModal(true)}
+            className="text-[11px] font-medium text-accent hover:underline hover:text-accent-hover focus-visible:outline-none cursor-pointer sm:text-xs"
+          >
+            All {ALLOWED_EXTENSIONS.length} formats →
+          </button>
+        </div>
+
+        {/* Collapsible openable box */}
+        <div className="mt-3 rounded-lg border border-line bg-elevated/40 overflow-hidden">
+          <button
+            type="button"
+            onClick={() => setExpanded((v) => !v)}
+            className={cn(
+              "flex w-full items-center justify-between px-3 py-2.5 text-left text-xs font-medium text-fg hover:bg-elevated transition-colors cursor-pointer",
+              focusRing
+            )}
+            aria-expanded={expanded}
+          >
+            <span className="text-muted">
+              {expanded ? "Hide categories" : "Show allowed categories"}
+            </span>
+            <span className="flex items-center gap-1 font-mono text-[11px] text-faint">
+              <span>{ALLOWED_CATEGORIES.length} categories</span>
+              <ChevronDown
+                size={14}
+                className={cn(
+                  "transition-transform duration-200",
+                  expanded && "rotate-180"
+                )}
+                aria-hidden
+              />
+            </span>
+          </button>
+
+          {expanded && (
+            <div className="space-y-3 border-t border-line p-3 text-xs animate-rise">
+              {ALLOWED_CATEGORIES.map((cat) => (
+                <div key={cat.id} className="space-y-1">
+                  <div className="flex items-center justify-between text-[11px]">
+                    <span className="font-medium text-fg">{cat.name}</span>
+                    <span className="font-mono text-faint">({cat.extensions.length})</span>
+                  </div>
+                  <p className="font-mono text-[10px] text-muted leading-relaxed sm:text-[11px]">
+                    {cat.extensions.map((e) => `.${e}`).join("  ")}
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
+
+      <AcceptedTypesModal
+        open={showModal}
+        onClose={() => setShowModal(false)}
+      />
     </div>
   );
 }

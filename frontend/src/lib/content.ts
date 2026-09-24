@@ -20,7 +20,7 @@ export interface Question {
 export const HOW_IT_WORKS: Step[] = [
   {
     title: "Drop your files",
-    body: "Choose a single file or select several at once — up to 10 MB in total. Multiple files are zipped for you before upload; a single file is sent exactly as it is.",
+    body: "Choose a single file or select several at once — up to 100 MB in total. Multiple files are zipped for you before upload; a single file is sent exactly as it is.",
   },
   {
     title: "Set the clock",
@@ -56,7 +56,7 @@ export const FAQ: Question[] = [
   {
     question: "Is there a limit on file size?",
     answer:
-      "10 MB per drop in total. For multi-file uploads that means the combined size of your selection. Supported files include images, PDFs, plain text, CSV, Office documents and zip archives.",
+      "100 MB per drop in total. For multi-file uploads that means the combined size of your selection. Supported files include images, PDFs, plain text, CSV, Office documents and zip archives.",
   },
   {
     question: "Are drops private?",

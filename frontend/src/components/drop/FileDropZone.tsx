@@ -12,6 +12,7 @@ import { Badge } from "../ui/Badge";
 import { Button } from "../ui/Button";
 import { IconButton } from "../ui/IconButton";
 import { FileTypeIcon } from "./FileTypeIcon";
+import { AcceptedTypesModal } from "./AcceptedTypesModal";
 
 export function FileDropZone({
   files,
@@ -32,6 +33,7 @@ export function FileDropZone({
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragging, setDragging] = useState(false);
+  const [showTypesModal, setShowTypesModal] = useState(false);
 
   const openPicker = () => inputRef.current?.click();
 
@@ -174,14 +176,25 @@ export function FileDropZone({
         </div>
       )}
 
-      <div className="flex flex-wrap items-center justify-between gap-2 px-0.5">
-        <p className="text-xs text-faint">
-          Up to {maxMb} MB per drop · up to {MAX_BUNDLE_FILES} files ·{" "}
-          {ALLOWED_EXTENSIONS.join(", ")}
+      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1.5 px-0.5 text-[11px] sm:text-xs">
+        <p className="text-faint">
+          Up to {maxMb} MB per drop · up to {MAX_BUNDLE_FILES} files
         </p>
+        <button
+          type="button"
+          onClick={() => setShowTypesModal(true)}
+          className="font-medium text-accent hover:underline hover:text-accent-hover focus-visible:outline-none cursor-pointer"
+        >
+          Supported formats ({ALLOWED_EXTENSIONS.length}) →
+        </button>
       </div>
 
       {error && <p className="px-0.5 text-xs text-danger">{error}</p>}
+
+      <AcceptedTypesModal
+        open={showTypesModal}
+        onClose={() => setShowTypesModal(false)}
+      />
     </div>
   );
 }

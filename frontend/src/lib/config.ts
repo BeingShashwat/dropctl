@@ -6,7 +6,7 @@
 
 import { formatBytes } from "./utils";
 
-export const MAX_FILE_BYTES = 10 * 1024 * 1024; // spring.servlet.multipart.max-file-size
+export const MAX_FILE_BYTES = 100 * 1024 * 1024; // spring.servlet.multipart.max-file-size (100MB)
 
 /**
  * UI-only cap on how many files one drop may bundle. The backend has no such
@@ -73,6 +73,86 @@ export const ALLOWED_EXTENSIONS = [
   "webm",
   "mkv",
   "avi",
+] as const;
+
+export interface FileCategory {
+  id: string;
+  name: string;
+  description: string;
+  extensions: string[];
+}
+
+export const ALLOWED_CATEGORIES: readonly FileCategory[] = [
+  {
+    id: "images",
+    name: "Images & Vectors",
+    description: "Photos, graphics & SVG",
+    extensions: ["jpg", "jpeg", "png", "gif", "webp", "svg"],
+  },
+  {
+    id: "documents",
+    name: "Documents & Data",
+    description: "PDF, Markdown, CSV, Office & data",
+    extensions: [
+      "pdf",
+      "txt",
+      "md",
+      "csv",
+      "json",
+      "yaml",
+      "yml",
+      "xml",
+      "sql",
+      "docx",
+      "xlsx",
+      "pptx",
+    ],
+  },
+  {
+    id: "code",
+    name: "Code & Scripts",
+    description: "Source code & shell scripts",
+    extensions: [
+      "js",
+      "jsx",
+      "ts",
+      "tsx",
+      "py",
+      "java",
+      "c",
+      "cpp",
+      "h",
+      "hpp",
+      "cs",
+      "go",
+      "rs",
+      "php",
+      "rb",
+      "html",
+      "htm",
+      "css",
+      "sh",
+      "bash",
+    ],
+  },
+  {
+    id: "archives",
+    name: "Archives",
+    description: "ZIP, Tar & Gzip",
+    extensions: ["zip", "tar", "gz"],
+  },
+  {
+    id: "audio",
+    name: "Audio",
+    description: "Music, voice & sound clips",
+    extensions: ["mp3", "wav", "ogg", "m4a", "flac", "aac"],
+  },
+  {
+    id: "video",
+    name: "Video",
+    description: "MP4, QuickTime, WebM & video clips",
+    extensions: ["mp4", "mov", "webm", "mkv", "avi"],
+  },
 ] as const;
 
 export const ALLOWED_ACCEPT = ALLOWED_EXTENSIONS.map((e) => `.${e}`).join(",");
