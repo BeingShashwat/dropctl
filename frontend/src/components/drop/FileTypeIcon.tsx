@@ -15,25 +15,69 @@ import { cn } from "../../lib/utils";
 import { extensionOf } from "../../lib/config";
 
 const BY_EXTENSION: Record<string, LucideIcon> = {
+  // Images
   jpg: ImageIcon,
   jpeg: ImageIcon,
   png: ImageIcon,
   gif: ImageIcon,
   webp: ImageIcon,
   svg: ImageIcon,
+
+  // Documents & Data
   pdf: FileText,
   txt: FileText,
-  docx: FileText,
+  md: FileCode,
   csv: FileSpreadsheet,
+  json: FileCode,
+  yaml: FileCode,
+  yml: FileCode,
+  xml: FileCode,
+  sql: FileCode,
+  docx: FileText,
   xlsx: FileSpreadsheet,
   pptx: Presentation,
+
+  // Code & Scripts
+  js: FileCode,
+  jsx: FileCode,
+  ts: FileCode,
+  tsx: FileCode,
+  py: FileCode,
+  java: FileCode,
+  c: FileCode,
+  cpp: FileCode,
+  h: FileCode,
+  hpp: FileCode,
+  cs: FileCode,
+  go: FileCode,
+  rs: FileCode,
+  php: FileCode,
+  rb: FileCode,
+  html: FileCode,
+  htm: FileCode,
+  css: FileCode,
+  sh: FileCode,
+  bash: FileCode,
+
+  // Archives
   zip: FileArchive,
-  json: FileCode,
-  md: FileCode,
-  mp4: FileVideo,
-  mov: FileVideo,
+  tar: FileArchive,
+  gz: FileArchive,
+
+  // Audio
   mp3: FileAudio,
   wav: FileAudio,
+  ogg: FileAudio,
+  m4a: FileAudio,
+  flac: FileAudio,
+  aac: FileAudio,
+
+  // Video
+  mp4: FileVideo,
+  mov: FileVideo,
+  webm: FileVideo,
+  mkv: FileVideo,
+  avi: FileVideo,
 };
 
 function iconFor(fileName: string, contentType: string): LucideIcon {

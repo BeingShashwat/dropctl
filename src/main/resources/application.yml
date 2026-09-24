@@ -27,19 +27,69 @@ spring:
 dropctl:
     upload:
         allowed-types:
-            # extension: [canonical content type, other sniffed types accepted for it...]
+            # Images
             jpg:  [image/jpeg]
             jpeg: [image/jpeg]
             png:  [image/png]
             gif:  [image/gif]
             webp: [image/webp]
+            svg:  [image/svg+xml, text/xml, application/xml, text/plain]
+
+            # Documents & Data
             pdf:  [application/pdf]
             txt:  [text/plain]
+            md:   [text/markdown, text/x-web-markdown, text/plain]
             csv:  [text/csv, text/plain]
+            json: [application/json, text/plain]
+            yaml: [application/x-yaml, text/yaml, text/plain, text/x-yaml]
+            yml:  [application/x-yaml, text/yaml, text/plain, text/x-yaml]
+            xml:  [application/xml, text/xml, text/plain]
+            sql:  [text/x-sql, application/sql, text/plain]
             docx: [application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/x-tika-ooxml, application/zip]
             xlsx: [application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/x-tika-ooxml, application/zip]
             pptx: [application/vnd.openxmlformats-officedocument.presentationml.presentation, application/x-tika-ooxml, application/zip]
-            zip: [application/zip, application/x-zip-compressed]
+
+            # Source code & scripts
+            js:   [application/javascript, text/javascript, text/plain]
+            jsx:  [text/jsx, text/javascript, text/plain]
+            ts:   [application/typescript, text/x-typescript, text/plain, video/mp2t]
+            tsx:  [text/tsx, text/typescript, text/plain]
+            py:   [text/x-python, text/x-script.python, text/plain]
+            java: [text/x-java-source, text/plain]
+            c:    [text/x-c, text/plain]
+            cpp:  [text/x-c++src, text/x-c, text/plain]
+            h:    [text/x-chdr, text/x-c, text/plain]
+            hpp:  [text/x-c++hdr, text/x-c, text/plain]
+            cs:   [text/x-csharp, text/plain]
+            go:   [text/x-go, text/plain]
+            rs:   [text/x-rust, text/plain]
+            php:  [application/x-httpd-php, text/x-php, text/plain]
+            rb:   [text/x-ruby, text/plain]
+            html: [text/html, text/plain]
+            htm:  [text/html, text/plain]
+            css:  [text/css, text/plain]
+            sh:   [application/x-sh, text/x-shellscript, text/plain]
+            bash: [application/x-sh, text/x-shellscript, text/plain]
+
+            # Archives
+            zip:  [application/zip, application/x-zip-compressed]
+            tar:  [application/x-tar, application/tar]
+            gz:   [application/gzip, application/x-gzip]
+
+            # Audio
+            mp3:  [audio/mpeg, audio/mp3, audio/x-mp3]
+            wav:  [audio/vnd.wave, audio/wav, audio/wave, audio/x-wav]
+            ogg:  [audio/ogg, application/ogg]
+            m4a:  [audio/mp4, audio/x-m4a]
+            flac: [audio/flac, audio/x-flac]
+            aac:  [audio/aac, audio/x-aac]
+
+            # Video
+            mp4:  [video/mp4, application/mp4]
+            mov:  [video/quicktime]
+            webm: [video/webm]
+            mkv:  [video/x-matroska]
+            avi:  [video/x-msvideo, video/avi]
     storage:
         bucket: ${S3_BUCKET_NAME}
         region: ${AWS_REGION}

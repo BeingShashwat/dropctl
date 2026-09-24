@@ -15,18 +15,64 @@ export const MAX_FILE_BYTES = 10 * 1024 * 1024; // spring.servlet.multipart.max-
 export const MAX_BUNDLE_FILES = 20;
 
 export const ALLOWED_EXTENSIONS = [
+  // Images
   "jpg",
   "jpeg",
   "png",
   "gif",
   "webp",
+  "svg",
+  // Documents & Data
   "pdf",
   "txt",
+  "md",
   "csv",
+  "json",
+  "yaml",
+  "yml",
+  "xml",
+  "sql",
   "docx",
   "xlsx",
   "pptx",
+  // Code & Scripts
+  "js",
+  "jsx",
+  "ts",
+  "tsx",
+  "py",
+  "java",
+  "c",
+  "cpp",
+  "h",
+  "hpp",
+  "cs",
+  "go",
+  "rs",
+  "php",
+  "rb",
+  "html",
+  "htm",
+  "css",
+  "sh",
+  "bash",
+  // Archives
   "zip",
+  "tar",
+  "gz",
+  // Audio
+  "mp3",
+  "wav",
+  "ogg",
+  "m4a",
+  "flac",
+  "aac",
+  // Video
+  "mp4",
+  "mov",
+  "webm",
+  "mkv",
+  "avi",
 ] as const;
 
 export const ALLOWED_ACCEPT = ALLOWED_EXTENSIONS.map((e) => `.${e}`).join(",");
