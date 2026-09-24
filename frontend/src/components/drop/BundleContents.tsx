@@ -96,7 +96,7 @@ export function BundleContents({
             {entries.map((entry, index) => (
               <li
                 key={`${entry.name}:${index}`}
-                className="flex items-center gap-3 px-3.5 py-2.5"
+                className="flex items-center gap-2 px-2.5 py-2.5 sm:gap-3 sm:px-3.5"
               >
                 <FileTypeIcon
                   fileName={entry.name}

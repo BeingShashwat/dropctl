@@ -21,12 +21,12 @@ function MetaRow({
   value: string;
 }) {
   return (
-    <div className="flex items-center justify-between gap-4 py-2.5">
+    <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 py-2.5">
       <span className="flex items-center gap-2 text-sm text-muted">
         <Icon size={15} className="text-faint" aria-hidden />
         {label}
       </span>
-      <span className="truncate text-right text-sm font-medium text-fg">
+      <span className="min-w-0 truncate text-right text-sm font-medium text-fg">
         {value}
       </span>
     </div>

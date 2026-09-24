@@ -73,7 +73,7 @@ function LimitsPanel() {
         <p className="font-mono text-[11px] tracking-[0.16em] text-faint uppercase">
           Accepted
         </p>
-        <p className="mt-2 font-mono text-[11px] leading-relaxed text-muted">
+        <p className="mt-2 font-mono text-[10px] leading-relaxed text-muted sm:text-[11px]">
           {ALLOWED_EXTENSIONS.join(" · ")}
         </p>
       </div>
@@ -197,14 +197,14 @@ function UploadForm({
               </span>
             </span>
 
-            <span className="flex items-center gap-2.5 font-mono text-[11px] text-muted">
-              <span className="truncate">
+            <span className="flex items-center gap-1.5 font-mono text-[11px] text-muted sm:gap-2.5">
+              <span className="hidden truncate sm:inline">
                 {slug.trim() ? `/${slug.trim().toLowerCase()}` : "auto-slug"}
               </span>
-              <span aria-hidden className="text-line-strong">
+              <span aria-hidden className="hidden text-line-strong sm:inline">
                 /
               </span>
-              <span>{activeOption?.short}</span>
+              <span className="hidden sm:inline">{activeOption?.short}</span>
               <ChevronDown
                 size={15}
                 className={cn(

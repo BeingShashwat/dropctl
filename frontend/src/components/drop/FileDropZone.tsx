@@ -66,7 +66,7 @@ export function FileDropZone({
       />
 
       {files.length > 0 ? (
-        <div className="rounded-xl border border-line bg-elevated p-3.5 sm:p-4">
+        <div className="rounded-xl border border-line bg-elevated p-3 sm:p-4">
           <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               {isBundle && (

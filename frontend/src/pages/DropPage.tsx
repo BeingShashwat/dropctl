@@ -32,7 +32,7 @@ function DropSkeleton() {
         <div className="border-b border-line px-4 py-2.5">
           <Skeleton className="h-2.5 w-44" />
         </div>
-        <div className="px-4 py-6 sm:px-7 sm:py-8">
+        <div className="px-3 py-5 sm:px-7 sm:py-8">
           <Skeleton className="h-9 w-64 max-w-full sm:h-12" />
         </div>
       </div>

@@ -41,7 +41,7 @@ export function Segmented<T extends string | number>({
             title={option.title ?? option.label}
             onClick={() => onChange(option.value)}
             className={cn(
-              "rounded-md px-2 py-1.5 text-xs font-medium sm:text-sm",
+              "rounded-md px-1 py-1.5 text-[11px] font-medium sm:px-2 sm:text-sm",
               focusRing,
               transitionBase,
               selected

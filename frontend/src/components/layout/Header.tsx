@@ -21,7 +21,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-canvas">
-      <div className="relative mx-auto flex max-w-5xl items-stretch border-x border-line">
+      <div className="relative mx-auto flex max-w-5xl items-stretch sm:border-x sm:border-line">
         {/* ── brand cell ─────────────────────────────────────────────── */}
         <div className="flex items-center py-2.5 pl-3 pr-3 sm:pl-4">
           <Logo />

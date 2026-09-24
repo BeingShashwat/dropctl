@@ -58,27 +58,27 @@ export function SlugHero({
         onClick={() => copy("slug")}
         aria-label="Copy the slug"
         className={cn(
-          "group flex w-full min-w-0 items-center gap-3 px-4 py-5 text-left sm:gap-5 sm:px-7 sm:py-7",
+          "group flex w-full min-w-0 items-center gap-2 px-3 py-4 text-left sm:gap-5 sm:px-7 sm:py-7",
           "transition-colors duration-150 hover:bg-elevated",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-inset"
         )}
       >
         <span
           aria-hidden
-          className="shrink-0 font-mono text-3xl leading-none text-faint select-none sm:text-5xl"
+          className="shrink-0 font-mono text-2xl leading-none text-faint select-none sm:text-5xl"
         >
           #
         </span>
 
         {/* break-all so even a maximum-length slug never overflows a phone. */}
-        <span className="min-w-0 flex-1 self-center font-mono text-3xl font-semibold break-all text-fg sm:text-5xl">
+        <span className="min-w-0 flex-1 self-center font-mono text-2xl font-semibold break-all text-fg sm:text-5xl">
           {slug}
         </span>
 
         <span
           aria-hidden
           className={cn(
-            "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border transition-colors duration-150",
+            "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border transition-colors duration-150 sm:h-10 sm:w-10",
             copied === "slug"
               ? "border-success-line bg-success-soft text-success"
               : "border-line bg-elevated text-muted group-hover:border-line-strong group-hover:text-fg"
@@ -95,7 +95,7 @@ export function SlugHero({
           onClick={() => copy("link")}
           aria-label="Copy the complete link"
           className={cn(
-            "group flex w-full min-w-0 items-center gap-3 border-t border-line px-4 py-2.5 text-left sm:px-7",
+            "group flex w-full min-w-0 items-center gap-2 border-t border-line px-3 py-2.5 text-left sm:gap-3 sm:px-7",
             "transition-colors duration-150 hover:bg-elevated",
             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-inset"
           )}
