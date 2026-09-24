@@ -1,6 +1,8 @@
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig, loadEnv, type Plugin } from "vite";
+import { readFileSync } from "node:fs";
+import { join, posix } from "node:path";
 
 /**
  * Emits robots.txt (and sitemap.xml when a site URL is configured) so those
@@ -73,8 +75,25 @@ function seoAssets(siteUrl: string): Plugin {
     },
 
     configureServer(server) {
+      // The sarcastic 404 page, read from public/ and cached for the session.
+      let notFoundPage: string | null = null;
+      const notFoundHtml = (): string => {
+        if (notFoundPage === null) {
+          try {
+            notFoundPage = readFileSync(
+              join(process.cwd(), "public", "404.html"),
+              "utf8"
+            );
+          } catch {
+            notFoundPage = "<!doctype html><title>404</title><p>404 — nothing here.</p>";
+          }
+        }
+        return notFoundPage;
+      };
+
       server.middlewares.use((req, res, next) => {
-        const url = req.url?.split("?")[0];
+        const url = (req.url ?? "/").split("?")[0];
+
         if (url === "/robots.txt") {
           res.setHeader("Content-Type", "text/plain; charset=utf-8");
           res.end(robots);
@@ -85,6 +104,35 @@ function seoAssets(siteUrl: string): Plugin {
           res.end(sitemap);
           return;
         }
+
+        /*
+         * Unknown application paths get the real 404 status plus the real
+         * page — unlike Vite's SPA fallback, which would serve index.html
+         * with a 200 and teach crawlers that every typo "exists".
+         * Module/asset URLs (with a dot) and Vite internals stay untouched.
+         */
+        const isViteInternal =
+          url.startsWith("/@") ||
+          url.startsWith("/src/") ||
+          url.startsWith("/node_modules/") ||
+          url.startsWith("/api/");
+        const looksLikeAsset = posix.extname(url) !== "";
+        const wantsHtml = (req.headers.accept ?? "").includes("text/html");
+
+        if (
+          req.method === "GET" &&
+          url !== "/" &&
+          url !== "/index.html" &&
+          !isViteInternal &&
+          !looksLikeAsset &&
+          wantsHtml
+        ) {
+          res.statusCode = 404;
+          res.setHeader("Content-Type", "text/html; charset=utf-8");
+          res.end(notFoundHtml());
+          return;
+        }
+
         next();
       });
     },
