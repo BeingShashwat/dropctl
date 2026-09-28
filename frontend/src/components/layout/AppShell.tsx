@@ -7,7 +7,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <Header />
 
       {/* The header is sticky, so content only needs breathing room below it. */}
-      <main className="mx-auto w-full max-w-5xl flex-1 px-3 pt-6 pb-8 sm:px-6 sm:pt-12 sm:pb-14">
+      <main className="mx-auto w-full max-w-5xl flex-1 overflow-x-hidden px-3 pt-6 pb-8 sm:px-6 sm:pt-12 sm:pb-14">
         {children}
       </main>
 

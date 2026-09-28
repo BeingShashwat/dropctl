@@ -357,7 +357,7 @@ function UploadResult({
   const shareUrl = shareUrlFor(result.slug, result.url);
 
   return (
-    <div className="space-y-5">
+    <div className="min-w-0 space-y-5">
       {/* The slug is the product — it leads the view at display size. */}
       <SlugHero slug={result.slug} shareUrl={shareUrl} />
 
@@ -422,7 +422,7 @@ export function UploadPage() {
   });
 
   return (
-    <div className="space-y-8 sm:space-y-10">
+    <div className="min-w-0 space-y-8 sm:space-y-10">
       <PageIntro
         kicker="Temporary file drops"
         title="Send files that delete themselves."
