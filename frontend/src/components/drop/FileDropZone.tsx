@@ -68,15 +68,15 @@ export function FileDropZone({
       />
 
       {files.length > 0 ? (
-        <div className="rounded-xl border border-line bg-elevated p-3 sm:p-4">
+        <div className="overflow-hidden rounded-xl border border-line bg-elevated p-3 sm:p-4">
           <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
+            <div className="flex min-w-0 items-center gap-2">
               {isBundle && (
                 <Badge tone="accent" icon={Layers}>
                   Bundle · {files.length} files
                 </Badge>
               )}
-              <span className="text-xs text-muted">
+              <span className="truncate text-xs text-muted">
                 {formatBytes(totalBytes)} total
               </span>
             </div>
@@ -88,7 +88,7 @@ export function FileDropZone({
             />
           </div>
 
-          <ul className="divide-y divide-line">
+          <ul className="min-w-0 divide-y divide-line">
             {files.map((file, index) => (
               <li key={`${file.name}:${file.size}:${index}`} className="flex min-w-0 items-center gap-3 py-2.5 first:pt-1 last:pb-1">
                 <FileTypeIcon
@@ -100,7 +100,7 @@ export function FileDropZone({
                   <p className="truncate text-sm font-medium text-fg" title={file.name}>
                     {file.name}
                   </p>
-                  <p className="mt-0.5 text-xs text-muted">
+                  <p className="mt-0.5 truncate text-xs text-muted">
                     {fileKindLabel(file.name, file.type)} · {formatBytes(file.size)}
                   </p>
                 </div>

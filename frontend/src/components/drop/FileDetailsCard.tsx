@@ -67,7 +67,7 @@ export function FileDetailsCard({
         }
       />
 
-      <div className="mt-5 flex items-center gap-4">
+      <div className="mt-5 flex items-center gap-4 overflow-hidden">
         <FileTypeIcon
           fileName={fileName}
           contentType={contentType}
