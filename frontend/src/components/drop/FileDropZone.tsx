@@ -90,7 +90,7 @@ export function FileDropZone({
 
           <ul className="divide-y divide-line">
             {files.map((file, index) => (
-              <li key={`${file.name}:${file.size}:${index}`} className="flex items-center gap-3 py-2.5 first:pt-1 last:pb-1">
+              <li key={`${file.name}:${file.size}:${index}`} className="flex min-w-0 items-center gap-3 py-2.5 first:pt-1 last:pb-1">
                 <FileTypeIcon
                   fileName={file.name}
                   contentType={file.type}
