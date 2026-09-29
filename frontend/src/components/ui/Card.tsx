@@ -20,7 +20,7 @@ export function Card({
   ...rest
 }: CardProps) {
   return (
-    <div className={cn(surfaceCard, PADDING[padding], className)} {...rest}>
+    <div className={cn(surfaceCard, "w-full overflow-hidden", PADDING[padding], className)} {...rest}>
       {children}
     </div>
   );

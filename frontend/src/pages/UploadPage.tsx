@@ -432,11 +432,11 @@ export function UploadPage() {
       {result ? (
         <UploadResult result={result} onReset={() => setResult(null)} />
       ) : (
-        <div className="grid gap-5 lg:grid-cols-5 lg:items-start">
-          <div className="lg:col-span-3">
+        <div className="grid min-w-0 gap-5 lg:grid-cols-5 lg:items-start">
+          <div className="min-w-0 lg:col-span-3">
             <UploadForm onUploaded={setResult} />
           </div>
-          <div className="space-y-5 lg:col-span-2">
+          <div className="min-w-0 space-y-5 lg:col-span-2">
             <OpenDropCard />
             <LimitsPanel />
           </div>
