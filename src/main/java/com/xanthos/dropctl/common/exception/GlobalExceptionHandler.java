@@ -74,4 +74,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .header(HttpHeaders.RETRY_AFTER, String.valueOf(ex.retryAfterSeconds()))
                 .body(problem);
     }
+
+    @ExceptionHandler(InvalidApiKeyException.class)
+    public ProblemDetail handleInvalidApiKey(InvalidApiKeyException ex) {
+        return problem(HttpStatus.UNAUTHORIZED, "Unauthorized", ex.getMessage());
+    }
 }
