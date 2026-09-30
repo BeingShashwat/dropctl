@@ -1,0 +1,8 @@
+frontend/
+mcp-server/
+target/
+.git/
+.idea/
+*.iml
+.mvn/wrapper/maven-wrapper.jar
+HELP.md
